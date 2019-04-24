@@ -1,0 +1,7 @@
+query AllEggBoxesLimit {
+  description: "Get egg boxes from a farmer limited to n packs"
+  statement:  
+    SELECT nl.hva.blockchain.eggtracking.model.EggBox
+     WHERE (origin == _$farmer AND status == 'PACKED')
+     LIMIT _$limit
+}

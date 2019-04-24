@@ -1,0 +1,92 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Model definitions
+ */
+
+namespace nl.hva.blockchain.eggtracking.model
+
+import nl.hva.blockchain.eggtracking.model.participant.*
+
+/** -------- Assets -------- */
+
+enum BoxStatus {
+  o PACKED                  // packed by the farmer
+  o READY_FOR_SHIPMENT      // waiting transporter
+  o IN_TRANSIT              // in possession of the transporter
+  o IN_DISTRIBUTION_CENTRE  // transferred to the distribution center
+  o DAMAGED                 // not consumable
+}
+
+enum ShippingStatus {
+  o READY
+  o LOADED
+  o DELIVERED
+}
+
+asset EggBox identified by boxId {
+  o String boxId 
+  o DateTime packingTimestamp
+  o BoxStatus status
+  o Integer quantity default = 30 range=[6,48]
+  --> Farmer origin
+  --> Member holder
+}
+
+asset EggShipment identified by shipmentId {
+  o String shipmentId
+  o DateTime creation
+  o DateTime loadTimestamp optional
+  --> EggBox[] eggs
+  --> Shipper shipper  
+  --> Farmer from
+  --> Distributor to
+  o ShippingStatus status
+  o DateTime deliveryDate optional
+}
+
+/** -------- Transactions -------- */
+
+transaction PackEggsTransaction {
+  --> Farmer producer
+  o Integer quantity default = 30 range=[6,48]
+  o DateTime packingTimestamp
+}
+
+transaction CreateShipmentTransaction {
+  --> Shipper shipper
+  --> Farmer from
+  --> Distributor to
+  o DateTime creation
+  o Integer min default = 1  range=[1,2000]
+  o Integer max default = 30 range=[1,2000]
+}
+
+transaction LoadTruckTransaction {
+  --> EggShipment shipment
+  o DateTime loadTimestamp
+}
+
+transaction DeliverEggsTransaction {
+  --> EggShipment shipment
+  o DateTime deliveryDate
+}
+
+transaction ReportDamageTransaction {
+  --> EggBox box
+  o DateTime when
+}
+
+

@@ -1,0 +1,8 @@
+#business network archives
+*.bna
+
+#card files
+*.card
+
+#dist folder
+dist/
