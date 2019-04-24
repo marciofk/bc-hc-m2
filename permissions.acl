@@ -1,108 +1,105 @@
 // All participants should be able to read system registries
-/*rule EggTrackingNetworkAdminPermissionSystem {
+rule EggTrackingNetworkAdminPermissionSystem {
   description: "Read system registries"
   participant: "ANY"
   operation: READ
   resource: "org.hyperledger.composer.system.**"
   action: ALLOW  
-}*/
+}
 
 // Network Administrators should be able to control system registries
-/*rule EggTrackingNetworkControlPermission {
+rule EggTrackingNetworkControlPermission {
   description:  "give admin ALL access to system resources"
   participant: "org.hyperledger.composer.system.NetworkAdmin"
   operation: ALL
   resource: "org.hyperledger.composer.system.**"
   action: ALLOW  
-}*/
+}
 
 // Network Administrators should be able to control participants
-/*rule ParticipantRegistryControlPermission {
+rule ParticipantRegistryControlPermission {
   description:  "give admin ALL access to participant types"
   participant: "org.hyperledger.composer.system.NetworkAdmin"
   operation: ALL
-  resource: "nl.hva.blockchain.eggtracking.model.participant.*"
+  resource: "nl.hva.blockchain.eggtracking.model.**" // can be reduced, too much power
   action: ALLOW  
-}*/
+}
 
 // Participants might be able to create transactions
-/*rule EggTrackingPermissionHistorian {
+rule EggTrackingPermissionHistorian {
   description: "Participants should be able to create history records in the historian"
   participant: "nl.hva.blockchain.eggtracking.model.participant.*"
   operation: CREATE
   resource: "org.hyperledger.composer.system.HistorianRecord"
   action: ALLOW
-}*/
+}
 
 // Only farmers can pack eggs through a transaction
-/*rule EggPackingCreationPermission {
+rule EggPackingCreationPermission {
   description: "Farmers can pack eggs"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Farmer"
   operation: CREATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.PackEggsTransaction"
   action: ALLOW
-}*/
+}
 
 // Only farmers can create shipments through a transaction
-/*rule CreateShipmentPermission {
+rule CreateShipmentPermission {
   description: "Farmers can create shipment"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Farmer"
   operation: CREATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.CreateShipmentTransaction"
   action: ALLOW
-}*/
+}
 
 // Only shippers can load truck
-/*rule LoadTruckPermission {
+rule LoadTruckPermission {
   description: "Shipper can load truck"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Shipper"
   operation: CREATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.LoadTruckTransaction"
   action: ALLOW
-}*/
+}
 
 // Only shippers can deliver eggs
-/*rule DeliverEggPermission {
+rule DeliverEggPermission {
   description: "Shipper can deliver eggs"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Shipper"
   operation: CREATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.DeliverEggsTransaction"
   action: ALLOW
-}*/
+}
 
 // Any participant can report damaged egg boxes
-/*rule ReportDamagedPermission {
+rule ReportDamagedPermission {
   description: "Any participant can report damaged egg boxes"
   participant: "nl.hva.blockchain.eggtracking.model.participant.*"
   operation: CREATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.ReportDamageTransaction"
   action: ALLOW
-}*/
+}
 
 // Only originators or holders can query eggboxes
-/*rule EggBoxQueryPermission {
+rule EggBoxQueryPermission {
   description: "Permission to retrieve egg boxes"
   participant(p): "nl.hva.blockchain.eggtracking.model.participant.*"
   operation: READ
   resource(r): "nl.hva.blockchain.eggtracking.model.EggBox"
   condition: (r.origin.getIdentifier() == p.getIdentifier() || r.holder.getIdentifier() == p.getIdentifier())
   action: ALLOW
-}*/
+}
 
 // Only involved parties in the shipment can query the shipment
-/*rule ShipmentPermission {
+rule ShipmentPermission {
   description: "Permission to retrieve shipment"
   participant(p): "nl.hva.blockchain.eggtracking.model.participant.*"
   operation: READ
   resource(r): "nl.hva.blockchain.eggtracking.model.EggShipment"
   condition: (r.shipper.getIdentifier() == p.getIdentifier() || r.from.getIdentifier() == p.getIdentifier() || r.to.getIdentifier() == p.getIdentifier())
   action: ALLOW
-}*/
-
-
-
+}
