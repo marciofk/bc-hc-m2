@@ -46,9 +46,9 @@ rule EggPackingCreationPermission {
 
 // Only farmers can create shipments through a transaction
 rule CreateShipmentPermission {
-  description: "Farmers can create shipment"
+  description: "Farmers can create shipment and update eggbox status"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Farmer"
-  operation: CREATE
+  operation: CREATE,UPDATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.CreateShipmentTransaction"
   action: ALLOW
@@ -58,7 +58,7 @@ rule CreateShipmentPermission {
 rule LoadTruckPermission {
   description: "Shipper can load truck"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Shipper"
-  operation: CREATE
+  operation: CREATE,UPDATE,READ
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.LoadTruckTransaction"
   action: ALLOW
@@ -68,7 +68,7 @@ rule LoadTruckPermission {
 rule DeliverEggPermission {
   description: "Shipper can deliver eggs"
   participant: "nl.hva.blockchain.eggtracking.model.participant.Shipper"
-  operation: CREATE
+  operation: CREATE,UPDATE,READ
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.DeliverEggsTransaction"
   action: ALLOW
@@ -78,7 +78,7 @@ rule DeliverEggPermission {
 rule ReportDamagedPermission {
   description: "Any participant can report damaged egg boxes"
   participant: "nl.hva.blockchain.eggtracking.model.participant.*"
-  operation: CREATE
+  operation: CREATE,UPDATE
   resource: "nl.hva.blockchain.eggtracking.model.*"
   transaction: "nl.hva.blockchain.eggtracking.model.ReportDamageTransaction"
   action: ALLOW
