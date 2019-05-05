@@ -18,7 +18,10 @@
 
 namespace nl.hva.blockchain.eggtracking.model
 
-import nl.hva.blockchain.eggtracking.model.participant.*
+import nl.hva.blockchain.eggtracking.model.participant.Farmer
+import nl.hva.blockchain.eggtracking.model.participant.Shipper
+import nl.hva.blockchain.eggtracking.model.participant.Distributor
+import nl.hva.blockchain.eggtracking.model.participant.Member
 
 /** -------- Assets -------- */
 
@@ -87,6 +90,18 @@ transaction DeliverEggsTransaction {
 transaction ReportDamageTransaction {
   --> EggBox box
   o DateTime when
+}
+
+/** -------- Events -------- */
+
+event ShipmentCreated {
+  o String shipmentId
+  o String shipperId
+}
+
+event ShipmentDelivered {
+  o String shipmentId
+  o String distId
 }
 
 

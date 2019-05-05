@@ -1,0 +1,16 @@
+{
+  "name": "subscribe-event",
+  "version": "1.0.0",
+  "description": "Subscribe Event App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "composer-admin": "^0.20.8",
+    "composer-client": "^0.20.8",
+    "composer-common": "^0.20.8"
+  }
+}

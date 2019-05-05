@@ -86,10 +86,58 @@ The ping command can be executed to check if the version was updated:
 
 You can expose your network using a REST server. You can use the command `composer-rest-server` to start the server. For development purposes, we are starting the server without authentication. The security feature will be covered later on. 
 
+## Instructions for Week 3
+
+### Events
+
+This project contains examples of event management, more specifically, emitting events and subscribing and receiving events.
+
+Here, some proposed steps to better understand this topic:
+
+* First, take a look at the [model file](models/nl.hva.blockchain.eggtracking.model.cto). Look up and examine two declared events.
+
+* Then, take a look at the [script file](lib/script.js) and examine how the transactions **createShipment** and **deliverEggs** are emitting events.
+
+As mentioned earlier, events can be captured using two mechanisms (via API and WebSockets. You can see the source-code example using different strategies, by opening:
+
+* The API-based version: It is a nodejs application and you can open the sub-project here [here](client/nodejs). Take a look at the app.js file that contains the logic to listen to events and the package.json with the Client API dependencies.
+
+* The WebSocket-based version: It is a simple HTML/CSS/Javascript example  that connects to the Composer REST server and listens to events. You can see the sub-project folder [here](client/web)
+
+#### Running the example application
+
+We assume that you have the  the Hyperledger Development Environment configured in your machine. If not, you can find instructions on the top of this page.
+
+##### Starting your network
+1. Open your terminal window
+2. Go to the *dist* folder of this project
+3. Execute the script to compile, install and start your network: `./compile.sh`. 
+
+##### Running the REST server
+
+Use the following command to start the REST server: `composer-rest-server -c admin@egg-tracking -n always -u true -w true`
+
+Note that the option `-w true` tells the server to enable WebSocket connections.
+
+##### Running the API-based client that intercepts connections
+
+1. Go to the *client/nodejs* folder of this project
+2. Start the listener using the following command: `node index.js`
+3. You should see the message `Starting event subscriber` in the console
+
+##### Running the WebSocket-based client that intercepts connections
+
+1. Use your preferred browser to open the file *client/web/index.html*
+2. You should be able to see the shipment listener interface
+
+##### Testing the events generation
+
+Now you have an empty blockchain network. You should feed the network with some information.
+
+1. Open the [REST Server Explorer at http://localhost:3000](http://localhost:3000/explorer/)
+2. Add participants - at least one farmer, one shipper and one distributor. Use the post operation of each participant.
+3. Pack at least one egg box (use the *PackEggsTransaction*)
+4. Create at least one shipment (use the *CreateShipmentTransaction*)
 
 
-
-
-
-
-
+After creating the shipment, both clients should have received the event. Check the logs of the nodejs application and the updated browser.

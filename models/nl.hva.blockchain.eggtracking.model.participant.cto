@@ -18,19 +18,14 @@
 
 namespace nl.hva.blockchain.eggtracking.model.participant
 
-/** -------- Concept -------- */
-concept Address {
-  o String streetName
-  o String postalCode
-  o String city
-  o String country default = "Netherlands"
-}
-
 /** -------- Participants -------- */
 abstract participant Member identified by memberId {
   o String memberId
   o String name
-  o Address address
+  o String streetName
+  o String postalCode
+  o String city
+  o String country default = "Netherlands"
 }
 
 participant Farmer extends Member {}
