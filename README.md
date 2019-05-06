@@ -94,7 +94,9 @@ This project contains examples of event management, more specifically, emitting 
 
 Here, some proposed steps to better understand this topic:
 
-* First, take a look at the [model file](models/nl.hva.blockchain.eggtracking.model.cto). Look up and examine two declared events.
+* First, update your local repository with remote changes. You can execute `git pull` or manually download the files from git.
+
+* Take a look at the [model file](models/nl.hva.blockchain.eggtracking.model.cto). Look up and examine two declared events.
 
 * Then, take a look at the [script file](lib/script.js) and examine how the transactions **createShipment** and **deliverEggs** are emitting events.
 
