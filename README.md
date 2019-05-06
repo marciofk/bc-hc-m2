@@ -94,7 +94,7 @@ This project contains examples of event management, more specifically, emitting 
 
 Here, some proposed steps to better understand this topic:
 
-* First, update your local repository with remote changes. You can execute `git pull` or manually download the files from git.
+* First, update your local repository with remote changes. 
 
 * Take a look at the [model file](models/nl.hva.blockchain.eggtracking.model.cto). Look up and examine two declared events.
 
