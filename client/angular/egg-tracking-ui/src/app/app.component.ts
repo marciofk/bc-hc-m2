@@ -16,8 +16,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import $ from 'jquery';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +25,13 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AppComponent implements AfterViewInit {
   title = 'app works!';
+  loggedUser = null;
 
-  constructor(private router: Router, private cookieService: CookieService) {}  
+  constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {}  
+
+  ngOnInit() {
+    this.getLoggedUser();
+  }
 
   ngAfterViewInit() {
     $('.nav a').on('click', function(){
@@ -50,6 +54,18 @@ export class AppComponent implements AfterViewInit {
 
   logout() {
     this.cookieService.delete('access_token');
+    this.loggedUser = null;
     this.router.navigate(['/']);
   }
+
+  getLoggedUser() {
+    this.httpClient.get('http://localhost:3000/api/system/ping', { withCredentials: true })
+          .subscribe( (res: any ) => {
+            this.loggedUser = res.participant;
+          }, error => {
+            this.loggedUser = null;
+          });
+  }
+
+
 }

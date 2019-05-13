@@ -34,6 +34,8 @@ import { LoadTruckTransactionComponent } from './LoadTruckTransaction/LoadTruckT
 import { DeliverEggsTransactionComponent } from './DeliverEggsTransaction/DeliverEggsTransaction.component';
 import { ReportDamageTransactionComponent } from './ReportDamageTransaction/ReportDamageTransaction.component';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpClientModule } from '@angular/common/http';
+
 
 
 
@@ -56,6 +58,7 @@ import { CookieService } from 'ngx-cookie-service';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     HttpModule,
     AppRoutingModule
   ],
