@@ -636,7 +636,54 @@ Now, do the same to other participants (F2, S1, and D1). Make sure that you:
 
 ### Angular Application
 
-In loco demonstration
+#### Creating an angular application from scratch
+
+To create a skeleton Angular application that can interact with the Composer REST API, you can use the yo hyperledger-composer command. 
+
+```
+yo hyperledger-composer
+```
+
+Follow the below so your output matches:
+
+```
+Welcome to the Hyperledger Composer project generator
+? Please select the type of project: Angular
+You can run this generator using: 'yo hyperledger-composer:angular'
+Welcome to the Hyperledger Composer Angular project generator
+? Do you want to connect to a running Business Network? Yes
+? Project name: [insert]
+? Description: Hyperledger Composer Angular project
+? Author name: [insert]
+? Author email: [insert]
+? License: Apache-2.0
+? Name of the Business Network card: admin@tutorial-network
+? Do you want to generate a new REST API or connect to an existing REST API?  Connect to an existing REST
+ API
+? REST server address: http://localhost
+? REST server port: 3000
+? Should namespaces be used in the generated REST API? Namespaces are uses
+Created application!
+```
+
+The generated application will be within a sub directory named after the Project name entered above.
+
+Finally enter this directory and to get the application running, run:
+
+`npm start`
+
+It will be available on http://localhost:4200
+
+#### Using the existing angular application from this repository
+
+The provided application was also generated using *yo* as a starting point. It ha additional functionality, adding login, logout functionalities and allows users to know which participant is logged in.
+
+To use it, use your terminal app and go to the folder *client/angular*. Execute the command `npm start`
+
+It will be available on http://localhost:4200
+
+
+
 
  
  
