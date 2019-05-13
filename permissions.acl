@@ -34,6 +34,15 @@ rule EggTrackingPermissionHistorian {
   action: ALLOW
 }
 
+// Participants might be able to see other participants
+rule ParticipantReadPermission {
+  description:  "give participants READ access to other participants"
+  participant: "nl.hva.blockchain.eggtracking.model.participant.*"
+  operation: READ
+  resource: "nl.hva.blockchain.eggtracking.model.participant.*" 
+  action: ALLOW  
+}
+
 // Only farmers can pack eggs through a transaction
 rule EggPackingCreationPermission {
   description: "Farmers can pack eggs"

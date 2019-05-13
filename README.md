@@ -102,7 +102,7 @@ Here, some proposed steps to better understand this topic:
 
 As mentioned earlier, events can be captured using two mechanisms (via API and WebSockets. You can see the source-code example using different strategies, by opening:
 
-* The API-based version: It is a nodejs application, and you can open the sub-project here [here](client/nodejs). Take a look at the app.js file that contains the logic to listen to events and the package.json with the Client API dependencies.
+* The API-based version: It is a nodejs application, and you can open the sub-project [here](client/nodejs). Take a look at the app.js file that contains the logic to listen to events and the package.json with the Client API dependencies.
 
 * The WebSocket-based version: It is a simple HTML/CSS/Javascript example that connects to the Composer REST server and listens to events. You can see the sub-project folder [here](client/web)
 
@@ -132,7 +132,7 @@ Note that the option `-w true` tells the server to enable WebSocket connections.
 1. Use your preferred browser to open the file *client/web/index.html*
 2. You should be able to see the shipment listener interface
 
-##### Testing the events generation
+##### Testing the generation of the events
 
 Now you have an empty blockchain network. You should feed the network with some information.
 
@@ -168,7 +168,7 @@ If for some reason, the EC2 server is down or if you do not want to depend on an
 * go to the *external-api* folder of this project
 * start the server by executing `npm app.js`
 * you should be able to see a message that the server is listening for requests
-* you should change your app script in *lib/script.js*. More specifically, change the value of the constant EXTERNAL\_API\_SERVER to the IP address of your machine. Note that any HTTP requests made to localhost, for example, http://localhost:5000/farmer/F1, will not work as expected. The most stratghtforward workaround is to get your IP address that is accessible by the container.
+* you should change your app script in *lib/script.js*. More specifically, change the value of the constant EXTERNAL\_API\_SERVER to the IP address of your machine. Note that any HTTP requests made to localhost, for example, http://localhost:5000/farmer/F1, will not work as expected. The most straightforward workaround is to get your IP address that is accessible by the container.
 * change the version of your app in package.json
 * redeploy your business network app using the *dist/compile.sh* script.
 
@@ -442,6 +442,225 @@ PUT http://ec2-35-181-51-108.eu-west-3.compute.amazonaws.com:5000:5000/config
 Note that we are using the AWS EC2 instance. You can change the host if you are using your own server. The divergence is marked as true, and the answer may vary each call. 
 
 Now you can test your application again, sending a *packEggsTransaction*. The expected result is a 500 (error) mentioning that the consensus for endorsement has failed.
+
+## Instructions for Week 4
+
+### Setup OAuth2 for Authentication
+
+We assume that you have the Hyperledger Development Environment configured in your machine. If not, you can find instructions on the top of this page.
+
+#### Step 1: Install passport strategy 
+Run the following command: `npm install -g passport-github`
+
+#### Step 2: Register for OAuth2 on github.com
+
+1. Log into github 
+2. Click on the user picture 
+3. Go to *Settings > Developer Settings
+4. Register a new application
+5. Inform the value `http://localhost:3000` for the Homepage URL
+6. Inform the value `http://localhost:3000/auth/github/callback`
+7. Save the information
+
+You will get the *client_id* and *secret* from github. Make sure to have these values available for further usage.
+
+#### Step 3: Setting-up the REST Server
+
+Take a look at the script file in `client/rest-server/rest-server.sh`
+
+This shell-script configures the environment variables that will be read by the composer-rest-server tool. Important values that you must check and adapt are:
+
+* COMPOSER_CARD: The administrator card 
+* COMPOSER_PROVIDERS: Configuration of the authentication provider. Make sure that you change the values of *clientId* and *clientSecret*.
+
+#### Step 4: Execute the launch script
+
+* Run the script file in `client/rest-server/rest-server.sh`
+
+#### Step 5: Test the application
+
+* Access the REST Server explorer [http://localhost:3000/explorer/](http://localhost:3000/explorer/). I recommend opening a private/incognito mode to open a brand new session.
+* Execute a GET operation on some participants or assets (e.g. Farmer). You should receive a 401 (Unauthorised return code)
+
+I have created some github accounts, so that you can test them:
+
+<table>
+<tr><th>Name</th><th>Account</th><th>password</th></tr>
+<tr><th>Farmer 1</th><td>eggtrackingf1@gmail.com</td><td>Eggtrackingfone@</td></tr>
+<tr><th>Farmer 2</th><td>eggtrackingf2@gmail.com</td><td>Eggtrackingftwo@</td></tr>
+<tr><th>Shipper 1</th><td>eggtrackings1@gmail.com</td><td>Eggtrackingsone@</td></tr>
+<tr><th>Distributor 1</th><td>eggtrackingd1@gmail.com</td><td>Eggtrackingdone@</td></tr>
+</table>
+
+Access the authentication endpoint: [http://localhost:3000/auth](http://localhost:3000/auth). 
+
+You will be redirected to the github authentication page and might ask you to accept authorising the app you created.
+
+If the authentication process worked fine, you should be able to query participants and assets. Note that a token was saved as a cookie and will always be sent for further requests. You can use the Chrome Inspector to check existing cookies.
+
+### Multi-user setup
+
+#### Setup persistence storage for wallet management
+
+##### Create a MongoDB instance
+
+1. For the sake of simplicity we will use a cloud-based instance of MongoDB called MongoDB Atlas. Access [https://www.mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+2. Create an acccount using the *Try Free* button. Follow the sign-in workflow to get the user.
+3. From the Atlas panel, create a cluster using the option *Build a cluster*
+4. Inform the host options (providers, version, name). I recommend using the free setup M0. FInish, by creating the cluster. It might take some minutes to initialise the cluster
+5. In the security tab, add a new user that has read and write access to the database: e.g. test/test
+6. Go to IP whitelist and create a rule to allow access from anywhere (for the sake of simplicity)
+7. Go to the overview and click on connect
+8. Select the *Connect with the Mongo Shell option*
+9. Find the string that contains the host name. We will use this name for the next step. Example of name: eggauth-zthkl.mongodb.net
+
+##### Change the shell script that starts the REST server
+
+Change the file client/rest-server/rest-server.sh and add the following lines before the startup command (composer-rest-server)
+
+```
+# multiuser
+export COMPOSER_MULTIUSER=true
+
+# datasource
+export COMPOSER_DATASOURCES='{
+  "db" : 
+    {
+      "name":"db",
+      "host":"NAME-OF-THE-MONGO-DB-HOST",
+     "database":"restauth",
+      "protocol":"mongodb+srv",
+      "user":"USERNAME",
+      "password":"PASSWORD",
+      "connector":"mongodb"
+    }
+}'
+```
+
+Use your values for the variables host, user and password.
+
+Next, install the Loopback connector by executing this command: `npm install -g loopback-connector-mongodb`
+
+
+#### Testing the multi-user setup
+
+##### Creating participants
+
+Now, we will create a list of participants for testing purposes
+
+<table>
+<tr><th>Type</th><th>ID</th><th>name</th></tr>
+<tr><th>Farmer</th><td>F1</td><td>Farmer 1</td></tr>
+<tr><th>Farmer</th><td>F2</td><td>Farmer 2</td></tr>
+<tr><th>Shipper</th><td>S1</td><td>Shipper 1</td></tr>
+<tr><th>Distributor</th><td>F2</td><td>Distributor 1</td></tr>
+</table>
+
+Execute the following commands to create each participant:
+
+
+```
+composer participant add -d '{ "$class": "nl.hva.blockchain.eggtracking.model.participant.Farmer",  "memberId": "F1","name": "Farmer 1","streetName": "Kipstraat, 123","postalCode": "2034HY","city": "Den Helder","country": "Netherlands"
+}' -c admin@egg-tracking
+```
+
+```
+composer participant add -d '{ "$class": "nl.hva.blockchain.eggtracking.model.participant.Farmer",  "memberId": "F2","name": "Farmer 2","streetName": "Kerkstraat, 721","postalCode": "1544RT","city": "Alkmaar","country": "Netherlands"
+}' -c admin@egg-tracking
+```
+
+```
+composer participant add -d '{ "$class": "nl.hva.blockchain.eggtracking.model.participant.Shipper",  "memberId": "S1","name": "Shipper 1","streetName": "Parkstraat, 889","postalCode": "2088GG","city": "Amsterdam","country": "Netherlands"
+}' -c admin@egg-tracking
+```
+
+```
+composer participant add -d '{ "$class": "nl.hva.blockchain.eggtracking.model.participant.Distributor",  "memberId": "D1","name": "Distributor 1","streetName": "Bloemstraat, 567","postalCode": "1677OP","city": "Lisse","country": "Netherlands"
+}' -c admin@egg-tracking
+```
+
+#### Creating identities
+
+Now, we will create the identities for each participant and issue a card for each one. Execute the following commands:
+
+```
+composer identity issue -u F1 -a "nl.hva.blockchain.eggtracking.model.participant.Farmer#F1" -c admin@egg-tracking
+```
+
+```
+composer identity issue -u F2 -a "nl.hva.blockchain.eggtracking.model.participant.Farmer#F2" -c admin@egg-tracking
+```
+
+```
+composer identity issue -u S1 -a "nl.hva.blockchain.eggtracking.model.participant.Shipper#S1" -c admin@egg-tracking
+```
+
+```
+composer identity issue -u D1 -a "nl.hva.blockchain.eggtracking.model.participant.Distributor#D1" -c admin@egg-tracking
+```
+
+Note that each command will generate a card file with the name *<id>@egg-tracking.card*, where id is the member id. We will use these files to import cards to the REST server wallet.
+
+#### Working with the multi-user setup
+
+##### Execute the server
+
+Now you can launch the script *client/rest-server/rest-server.sh*
+
+##### Importing wallets
+
+Now you can access the endpoint [http://localhost:3000/auth](http://localhost:3000/auth). Login with the github user *eggtrackingf1@gmail.com/Eggtrackingfone@*, which corresponds to the farmer 1.
+
+Back to [http://localhost:3000](http://localhost:3000), try to query participants or assets. The server will generate an error, telling that this account does not have yet a corresponding card. Thus, an additional step is necessary.
+
+You will see a new endpoint called *Wallet*. This endpoint is enabled in multi-user mode and allows you to manage your wallet.
+
+Now, execute a POST operation on */wallet/import*, uploading the card *F1@egg-tracking.card*. If everything went well you would receive a 204 return code.
+
+You can check if everything went well by executing a System Ping command. The return message should contain the attached participant to your identity.
+
+Now, do the same to other participants (F2, S1, and D1). Make sure that you:
+
+ * sign-out from github: [http://github.com](http://github.com)
+ * login in again using the remaining accounts [http://localhost:3000/auth](http://localhost:3000/auth)
+ * Import the corresponding card to the wallet
+
+ #### Using the REST API using different users
+ 
+ Execute the following steps:
+ 
+1. Log in as Farmer 1
+2. Pack some eggs
+3. Query EggBoxes
+4. Do steps 1, 2, and 3 for Farmer 2
+
+### Angular Application
+
+In loco demonstration
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
