@@ -678,9 +678,26 @@ It will be available on http://localhost:4200
 
 The provided application was also generated using *yo* as a starting point. It ha additional functionality, adding login, logout functionalities and allows users to know which participant is logged in.
 
-To use it, use your terminal app and go to the folder *client/angular*. Execute the command `npm start`
+To use it, use your terminal app and go to the folder *client/angular/egg-tracking-ui*. Execute the command `npm start`
 
 It will be available on http://localhost:4200
+
+I recommend making some tests using different participants. For example:
+
+* Login as Farmer 1
+* Package some eggs
+* Query egg boxes
+* Create a shippment
+* Query shipment
+* Execute the same steps for Farmer 2
+* Login as a Shipper
+* Load truck
+* Query shipment and egg boxes
+* Deliver eggs
+* Query shipment and egg boxes (they should not be visible anymore)
+* Login as a Distributor
+* Query egg boxes and shipment
+* Mark one or more egg boxes as damaged
 
 
 

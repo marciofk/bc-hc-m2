@@ -14,30 +14,13 @@ export COMPOSER_PROVIDERS='{
   "github": {
     "provider": "github",
     "module": "passport-github",
-    "clientID": "cfab125c0351a6b0692d",
-    "clientSecret": "3cf9af8c01f63a39a5a5ae6c1f94ca691f01810f",
+    "clientID": "YOUR CLIENT ID",
+    "clientSecret": "YOUR SECRET",
     "authPath": "/auth",
     "callbackURL": "/auth/github/callback",
     "successRedirect": "http://localhost:4200",
     "failureRedirect": "/"
   }
-}'
-
-# multiuser
-export COMPOSER_MULTIUSER=true
-
-# datasource
-export COMPOSER_DATASOURCES='{
-  "db" : 
-    {
-      "name":"db",
-      "host":"eggauth-zthkl.mongodb.net",
-     "database":"restauth",
-      "protocol":"mongodb+srv",
-      "user":"test",
-      "password":"test",
-      "connector":"mongodb"
-    }
 }'
 
 # execute the rest server
