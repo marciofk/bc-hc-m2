@@ -1,0 +1,22 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-ut-harness.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "composer-admin": "^0.20.5",
+    "composer-cli": "^0.20.5",
+    "composer-client": "^0.20.5",
+    "composer-connector-embedded": "^0.20.5",
+    "fs": "0.0.1-security",
+    "grpc": "^1.17.0",
+    "mocha": "^5.2.0",
+    "websocket": "^1.0.28"
+  }
+}

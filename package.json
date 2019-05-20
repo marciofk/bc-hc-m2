@@ -3,7 +3,7 @@
     "composer": "^0.20.8"
   },
   "name": "egg-tracking",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "description": "Egg Production Tracking Network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/egg-tracking.bna",
