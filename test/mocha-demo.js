@@ -1,3 +1,4 @@
+
 /**
  * An example of usage of the Mocha Test Framework by Rajeev Sakhuja
  * 
@@ -34,7 +35,7 @@ describe('Enclosing Suite', () => {
 
         // Test case # 1
         it('Test Case# 1', () => {
-
+            //clearthrow new Error("Ooops")
         });
 
         // Test case # 2

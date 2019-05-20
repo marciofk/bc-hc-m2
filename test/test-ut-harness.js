@@ -27,7 +27,7 @@ utHarness.initialize(modelFolder, (adminCon, bnCon, definition)=>{
         console.log("BNA =",definition.getName(),'@',definition.getVersion());
 
         // Lets geth the registries
-        return bnCon.getAllAssetRegistries(false).then((registries)=>{
+        return bnCon.getAllParticipantRegistries(false).then((registries)=>{
             registries.forEach((registry)=>{
                 console.log(registry.id)
             });

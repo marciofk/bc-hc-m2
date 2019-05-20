@@ -1,6 +1,9 @@
 /**
- * Testing a transaction execution
+ * Week 5: Composer Tests: Executing a transaction (packing eggs)
+ * Marcio Fuckner
+ * Inspired by the examples provided by Rajeev Sakhuja @ http://ACloudFan.com
  */
+
 var assert = require('chai').assert;
 
 // You need to change this to your specific directory
@@ -25,6 +28,7 @@ before((done) => {
     });
 })
 
+// Creating a farmer to be used afterwards`
 before((done) => {
     let registry ={}
     // Add the required participant to be used further on
@@ -69,6 +73,7 @@ describe('Package Eggs', () => {
 
             return businessNetworkConnection.submitTransaction(transaction);
         }).then((transaction) => {
+            console.log(transaction);
             return businessNetworkConnection.getAssetRegistry(nameSpace+'.'+'EggBox');
         }).then((registry) => {
             return registry.getAll();
