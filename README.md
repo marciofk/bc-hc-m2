@@ -699,36 +699,71 @@ I recommend making some tests using different participants. For example:
 * Query egg boxes and shipment
 * Mark one or more egg boxes as damaged
 
+## Instructions for Week 5
+
+This week is about testing a business network application. Among of the advantages of testing are the improvement of code quality and the performance improvement by using in-memory business networks. By using an embedded business network app, you don't need to deploy the application to a physical network.
+
+### Test harness
+
+The file *test/ut-harness.js* created by Rajeev Sakhuja is responsible for preparing the in-memory environment. Among the tasks are:
+
+* Creating the peer admin card
+* Installing and starting the business network app
+* Connecting to the app
+
+You can see a practical example of the library that creates a BNA and lists all participants on the console. To run the example:
+
+* Open the terminal
+* Go to the test folder of your app `cd test`
+* Execute `npm install` to download the libraries. You can take a look at the file *package.json* to check all the necessary dependencies.
+* Execute the test code: `node test-ut-harness.js`
+* You should be able to see the participants in the console
+
+### Getting acquainted with mocha
+
+[Mocha](https://mochajs.org/) is a test framework for JavaScript applications. We will use it to create some tests.
+
+We are covering the basics of the tool. There are good sources to learn mocha on the web, including their portal. In summary, mocha allows developers to organise tests in suites, creating tests, as well as pre and post actions. 
+
+* Take a look at the file *test/mocha-demo.js*
+* Open your terminal
+* Go to the test folder of your app `cd test`
+* Install the mocha tool: `npm install --global mocha`
+* run the mocha demo test: `mocha mocha-demo.js`
+* you should be able to see the logs and the test summary (success/fails) of tests in the console
+
+### Getting acquainted with chai
+
+Chai is an assertion framework that works very well with mocha. Assertions are fundamental elements of testing, checking if the current state of the system complies with the expected results.
+
+Developers used to JUnit assertions will feel like home. To know more about chai, you can access their [official page](https://www.chaijs.com/).
 
 
+* Take a look at the file *test/chai-demo-assertions.js*
+* Open your terminal
+* Go to the test folder of your app `cd test`
+* run the chai demo : `mocha chai-demo-assertions.js`
+* you should be able to see the logs and the test summary (success/fails) of tests in the console
 
- 
- 
+### Putting all together: Creating tests for your application
 
+Now that you have been presented to the test harness for hyperledger composer, mocha and chai, we will examine two examples of test for our Egg Tracking Application
 
+The first test, called *test-farmer.js* is used to create a new farmer and check if the information is valid.
 
+Instructions to test:
 
+* Examine the file *test-farmer.js*
+* Open your terminal
+* Go to the test folder of your app `cd test`
+* Run the test: `mocha test-farmer.js`
 
+The second test, called *test/test-transaction.js* is used to invoke a transaction (packEggs) and check if the asset (EggBox) was properly created.
 
+Instructions to test:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* Examine the file *test/test-transaction.js*
+* Open your terminal
+* Go to the test folder of your app `cd test`
+* Run the test: `mocha test-farmer.js`
 

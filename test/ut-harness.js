@@ -11,7 +11,7 @@
  * 5. Connect the adminConnection to embedded runtime
  * 6. Create the business network definition fromDirectory
  * 7. Install the business network definition
- * 8. Start the airlinev7 
+ * 8. Start the app 
  * 9. Import the network admin ID Card
  * 10. Invoke the connect on businessNetwork connection object
  * 11. Invoke Callback(....)

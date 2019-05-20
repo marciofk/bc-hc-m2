@@ -16,8 +16,6 @@
 const utHarness = require('./ut-harness');
 
 var modelFolder = '..';
-//var modelFolder = '';
-
 
 // Set this to false for suppressing the UTH messages
 utHarness.debug=true;

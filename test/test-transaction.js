@@ -5,6 +5,8 @@
  */
 
 var assert = require('chai').assert;
+var fail = require('chai').fail;
+
 
 // You need to change this to your specific directory
 const utHarness = require('./ut-harness.js');
@@ -55,35 +57,32 @@ before((done) => {
 describe('Package Eggs', () => {
 
     // Test Case # 1 packing eggs
-    it('should create an eggbox asset', () => {
+    it('should create an eggbox asset', async () => {
 
-        let theFarmer;
+        // get the farmer registry
+        let farmerRegistry = await businessNetworkConnection.
+                            getParticipantRegistry(nameSpace+'.'+'participant.Farmer');
 
-        businessNetworkConnection.getParticipantRegistry(nameSpace+'.'+'participant.Farmer').then((reg)=>{
-            return farmer = reg.get('F1');
-        }).then((farmer) => {
-            theFarmer = farmer;
-            return businessNetworkConnection.getTransactionRegistry(nameSpace+"."+"PackEggsTransaction");
-        }).then((reg) => {
-            const  factory = bnDefinition.getFactory();
-            // Create the instance
-            let transaction = factory.newResource(nameSpace,"PackEggsTransaction","1");
-            transaction.producer = factory.newRelationship(nameSpace+".participant",'Farmer',theFarmer.memberId);
-            transaction.packingTimestamp = new Date();
+        // get the previously added farmer
+        let farmer = await farmerRegistry.get('F1');
 
-            return businessNetworkConnection.submitTransaction(transaction);
-        }).then((transaction) => {
-            console.log(transaction);
-            return businessNetworkConnection.getAssetRegistry(nameSpace+'.'+'EggBox');
-        }).then((registry) => {
-            return registry.getAll();
-        }).then((eggboxes) => {
-            assert.equal(eggboxes.length,1,"should have one eggbox");
-            assert.equal(eggboxes[0].quantity,30,'should have 30 eggs');
-        }).catch((error) => {
-            throw error;
-        })
+        // get the factory
+        let factory = bnDefinition.getFactory();
 
+        // create a transaction
+        let transaction = factory.newResource(nameSpace,"PackEggsTransaction","id");
+        transaction.producer = factory.newRelationship(nameSpace+".participant",'Farmer',farmer.memberId);
+        transaction.packingTimestamp = new Date();
+
+        // submit the transaction
+        await businessNetworkConnection.submitTransaction(transaction);
+
+        // check if the eggbox was created
+        let eggBoxRegistry = await businessNetworkConnection.getAssetRegistry(nameSpace+'.'+'EggBox');
+        let eggBoxes = await eggBoxRegistry.getAll();
+
+        assert.equal(eggBoxes.length,1,"should have one eggbox");
+        assert.equal(eggBoxes[0].quantity,30,'should have 30 eggs');
     });
 });
 
